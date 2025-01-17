@@ -1,10 +1,8 @@
-import logging
 import re
-from datetime import datetime
 from bs4 import Tag, BeautifulSoup
 
 from .base_parser import BaseParser
-from utils.logger import get_logger
+from scraper.utils.logger import get_logger
 from scraper.utils.data_formatter import DataFormatter
 
 logger = get_logger(__name__)

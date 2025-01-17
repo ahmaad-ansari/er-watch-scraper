@@ -1,9 +1,8 @@
 import os
 import psycopg2
 from datetime import datetime
-from dotenv import load_dotenv
 from typing import List, Dict
-from utils.logger import get_logger
+from scraper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

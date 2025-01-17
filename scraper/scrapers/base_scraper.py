@@ -1,7 +1,6 @@
-# base_scraper.py
 from abc import ABC, abstractmethod
 from datetime import datetime
-from utils.logger import get_logger
+from scraper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

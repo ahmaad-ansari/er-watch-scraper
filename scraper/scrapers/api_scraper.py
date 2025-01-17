@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from .base_scraper import BaseScraper
 from scraper.parsers.api_parser import APIParser
-from utils.logger import get_logger
+from scraper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

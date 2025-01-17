@@ -3,12 +3,12 @@ import json
 import os
 from pathlib import Path
 
-from aggregator import Aggregator
-from utils.logger import get_logger
-from repository.supabase_repository import SupabaseRepository
-
+from scraper.aggregator import Aggregator
+from scraper.utils.logger import get_logger
+from scraper.repository.supabase_repository import SupabaseRepository
 
 logger = get_logger(__name__)
+
 
 async def main():
     """

@@ -1,8 +1,8 @@
-from scrapers.api_scraper import APIScraper
-from scrapers.html_scraper import HTMLScraper
-from scrapers.pbi_scraper import PBIScraper
-from repository.supabase_repository import SupabaseRepository
-from utils.logger import get_logger
+from scraper.scrapers.api_scraper import APIScraper
+from scraper.scrapers.html_scraper import HTMLScraper
+from scraper.scrapers.pbi_scraper import PBIScraper
+from scraper.repository.supabase_repository import SupabaseRepository
+from scraper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

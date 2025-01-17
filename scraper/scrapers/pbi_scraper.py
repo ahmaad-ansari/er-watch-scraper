@@ -1,12 +1,10 @@
 import asyncio
-import time
-from datetime import datetime
-
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
+
 from .base_scraper import BaseScraper
 from scraper.parsers.html_parser import HTMLParser
-from utils.logger import get_logger
+from scraper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

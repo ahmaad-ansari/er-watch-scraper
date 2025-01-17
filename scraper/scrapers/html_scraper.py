@@ -1,11 +1,9 @@
-from datetime import datetime
-
 import requests
 from bs4 import BeautifulSoup
 
 from .base_scraper import BaseScraper
 from scraper.parsers.html_parser import HTMLParser
-from utils.logger import get_logger
+from scraper.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
