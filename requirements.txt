@@ -1,7 +1,16 @@
 beautifulsoup4==4.12.3
+certifi==2024.12.14
+charset-normalizer==3.4.1
+colorama==0.4.6
 colorlog==6.9.0
+greenlet==3.1.1
+idna==3.10
 playwright==1.49.1
 psycopg2==2.9.10
+pyee==12.0.0
 python-dotenv==1.0.1
 pytz==2024.2
-Requests==2.32.3
+requests==2.32.3
+soupsieve==2.6
+typing_extensions==4.12.2
+urllib3==2.3.0

@@ -1,0 +1,27 @@
+name: Run Scraper Every 15 Minutes
+
+on:
+  schedule:
+    # Use cron syntax to schedule every 15 minutes
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    # Allows manual trigger of the workflow from GitHub UI if needed
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.5"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the main script
+        run: python -m scraper.main
