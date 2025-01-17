@@ -1,27 +1,35 @@
-name: Run Scraper Every 15 Minutes
+name: Run My Scraper
 
 on:
+  push:
+    branches: [ "main" ]
   schedule:
-    # Use cron syntax to schedule every 15 minutes
     - cron: "*/15 * * * *"
-  workflow_dispatch:
-    # Allows manual trigger of the workflow from GitHub UI if needed
 
 jobs:
   run-scraper:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository code
+      - name: Check out repo
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11.5"
+          python-version: '3.11.5'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+
+      - name: Configure ENV
+        # Option 1: Write secrets to GITHUB_ENV so your Python code can read them via os.environ
+        run: |
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
 
       - name: Run the main script
         run: python -m scraper.main

@@ -37,7 +37,7 @@ class SupabaseRepository:
             psycopg2.OperationalError: If unable to connect to the database.
         """
         # Load environment variables from .env file (if present)
-        load_dotenv()
+        # load_dotenv()
 
         # Read database connection parameters
         self.user = os.getenv("DB_USER")
