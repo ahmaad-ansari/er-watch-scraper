@@ -22,6 +22,12 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Install Playwright Browsers
+        run: |
+          playwright install
+          # If you only need Chromium, you can do playwright install chromium
+          # If you need all browsers: playwright install --with-deps
+
       - name: Configure ENV
         # Option 1: Write secrets to GITHUB_ENV so your Python code can read them via os.environ
         run: |
