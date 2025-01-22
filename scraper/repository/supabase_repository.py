@@ -3,6 +3,7 @@ import psycopg2
 from datetime import datetime
 from typing import List, Dict
 from scraper.utils.logger import get_logger
+from dotenv import load_dotenv
 
 logger = get_logger(__name__)
 

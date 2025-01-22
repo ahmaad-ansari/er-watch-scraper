@@ -207,8 +207,8 @@ if __name__ == "__main__":
         {
             "lastUpdated": {
                 "format_code": "%B %d, %Y at %I:%M %p",
-                "pattern": r"([A-Za-z]+\s\d{1,2},\s\d{4}\sat\s\d{1,2}:\d{2}\s(a\.m\.|p\.m\.))",
-                "raw_value": "January 17, 2025 at 4:00 p.m.",
+                "pattern": r"(\w+ \d{1,2}, \d{4} at \d{1,2}:\d{2} [AP]M)",
+                "raw_value": "January 17, 2025 at 10:45 PM",
                 "unit": None
             },
             "patientsWaiting": {
