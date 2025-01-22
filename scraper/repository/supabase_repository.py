@@ -22,7 +22,7 @@ class SupabaseRepository:
         host (str): Database host from environment variables.
         port (str): Database port from environment variables.
         dbname (str): Database name from environment variables.
-        conn (psycopg2.extensions.connection or None): Active database connection, if any.
+        conn (psycopg2.extensions.connection or None): online database connection, if any.
         cursor (psycopg2.extensions.cursor or None): Cursor for executing SQL commands, if any.
     """
 
@@ -89,7 +89,7 @@ class SupabaseRepository:
                 - "patients_waiting": int or None
                 - "patients_in_treatment": int or None
                 - "last_updated": datetime or str or None
-                - "status": str (e.g., "active", "inactive")
+                - "status": str (e.g., "online", "offline")
         """
         if self.conn is None or self.cursor is None:
             logger.error("Cannot save data: no database connection is available.")

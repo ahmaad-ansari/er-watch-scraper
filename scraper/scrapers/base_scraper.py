@@ -44,7 +44,7 @@ class BaseScraper(ABC):
             "patients_waiting": parsed_data.get("patients_waiting"),
             "patients_in_treatment": parsed_data.get("patients_in_treatment"),
             "last_updated": parsed_data.get("last_updated", datetime.utcnow()),
-            "status": "active" if not parsed_data.get("estimated_wait_time") == -1 else "inactive",
+            "status": "online" if not parsed_data.get("estimated_wait_time") == -1 else "offline",
         }
 
         logger.debug(f"Successfully scraped data for hospital_id={self.hospital_id}: {data_for_db}")

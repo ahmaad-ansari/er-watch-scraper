@@ -82,17 +82,17 @@ class Aggregator:
                 # Log any scraper-related exception, then move to the next target.
                 logger.error(f"An error occurred while scraping hospital_id={hospital_id}: {e}", exc_info=True)
 
-                # Create a minimal data dictionary marking the row as inactive
+                # Create a minimal data dictionary marking the row as offline
                 error_data = {
                     "hospital_id": hospital_id,
                     "estimated_wait_time": None,
                     "patients_waiting": None,
                     "patients_in_treatment": None,
                     "last_updated": None,
-                    "status": "inactive",
+                    "status": "offline",
                 }
 
-                # Save that data to set the row's status to "inactive"
+                # Save that data to set the row's status to "offline"
                 self.supabase_repo.save_scraped_data(error_data)
                 continue
 
