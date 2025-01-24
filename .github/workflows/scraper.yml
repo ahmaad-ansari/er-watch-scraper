@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
   schedule:
     - cron: "*/15 * * * *"
+  workflow_dispatch:  # Enable manual invocation of the workflow
 
 jobs:
   run-scraper:
@@ -27,7 +28,7 @@ jobs:
           playwright install chromium
 
       - name: Configure ENV
-        # Option 1: Write secrets to GITHUB_ENV so your Python code can read them via os.environ
+        # Write secrets to GITHUB_ENV so your Python code can read them via os.environ
         run: |
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV

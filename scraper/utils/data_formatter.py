@@ -206,9 +206,10 @@ if __name__ == "__main__":
     test_cases = [
         {
             "lastUpdated": {
-                "format_code": "%B %d, %Y at %I:%M %p",
-                "pattern": r"(\w+ \d{1,2}, \d{4} at \d{1,2}:\d{2} [AP]M)",
-                "raw_value": "January 17, 2025 at 10:45 PM",
+                "pattern": "^([A-Za-z]+ \\d{1,2}, \\d{4}) at (\\d{1,2}:\\d{2} (a\\.m\\.|p\\.m\\.))$",
+                "format_code": "%B %d, %Y",
+                "raw_value": "January 24, 2025 at 2:30 p.m.",
+
                 "unit": None
             },
             "patientsWaiting": {
