@@ -23,7 +23,7 @@ def get_logger(name: str) -> logging.Logger:
         return logger
 
     # Set the default logging level. Messages at or above this level are shown.
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
 
     # Create a colorlog formatter with a pattern and color mapping for each log level.
     # The format includes:
@@ -45,7 +45,7 @@ def get_logger(name: str) -> logging.Logger:
 
     # Create a handler that outputs log messages to the console (stdout).
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
+    console_handler.setLevel(logging.DEBUG)
     console_handler.setFormatter(formatter)
 
     # Attach the console handler to the logger.
