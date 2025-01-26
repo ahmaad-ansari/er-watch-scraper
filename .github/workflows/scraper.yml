@@ -5,11 +5,13 @@ on:
     branches: [ "main" ]
   schedule:
     - cron: "*/15 * * * *"
-  workflow_dispatch:  # Enable manual invocation of the workflow
+  workflow_dispatch:
 
 jobs:
   run-scraper:
     runs-on: ubuntu-latest
+    env:
+      TZ: UTC
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -20,15 +22,12 @@ jobs:
           python-version: '3.11.5'
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Install Playwright Browsers
-        run: |
-          playwright install chromium
+        run: playwright install chromium
 
       - name: Configure ENV
-        # Write secrets to GITHUB_ENV so your Python code can read them via os.environ
         run: |
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
