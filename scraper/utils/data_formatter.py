@@ -216,9 +216,9 @@ if __name__ == "__main__":
     test_cases = [
         {
             "lastUpdated": {
-                "pattern": r"^([A-Za-z]+ \d{1,2}, \d{4}) at (\d{1,2}:\d{2} (a\.m\.|p\.m\.))$",
-                "format_code": "%B %d, %Y",
-                "raw_value": "January 24, 2025 at 2:30 p.m.",
+                "pattern": r"^([A-Za-z]+ \d{1,2}, \d{4} at \d{1,2}:\d{2} (AM|PM))$",
+                "format_code": "%B %d, %Y at %I:%M %p",
+                "raw_value": "January 27, 2025 at 1:30 AM",
                 # Suppose we say the data is EST:
                 "unit": "EST"
             },
