@@ -41,5 +41,5 @@ jobs:
 
       - name: Revalidate Next.js Page
         run: |
-          curl -v -L -X POST "https://er-watch.ca/api/revalidate?secret=${{ secrets.REVALIDATE_SECRET }}"
+          curl -L -X POST "https://er-watch.ca/api/revalidate?secret=${{ secrets.REVALIDATE_SECRET }}"
 
