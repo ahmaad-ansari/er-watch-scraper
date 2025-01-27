@@ -1,4 +1,4 @@
-name: Run My Scraper
+name: Hospital Wait Time Scraper
 
 on:
   push:
@@ -34,6 +34,11 @@ jobs:
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.REVALIDATE_SECRET }}" >> $GITHUB_ENV
 
       - name: Run the main script
         run: python -m scraper.main
+
+      - name: Revalidate Next.js Page
+        run: |
+          curl -X POST "https://er-watch.com/api/revalidate?secret=${{ secrets.REVALIDATE_SECRET }}"

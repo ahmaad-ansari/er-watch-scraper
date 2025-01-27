@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0baf5b99-897b-4f41-8e67-f80b806040b5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/scraper.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/scraper.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/scraping_targets_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/scraping_targets_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/utils/data_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/utils/data_formatter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
