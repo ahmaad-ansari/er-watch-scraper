@@ -18,8 +18,6 @@ class DataFormatter:
     - patientsWaiting
     - patientsInTreatment
     - estimatedWaitTime
-
-    The specific field determines what kind of parsing logic is used.
     """
 
     @staticmethod
@@ -34,7 +32,7 @@ class DataFormatter:
             format_code (str): A datetime format string to guide parsing, if needed.
             raw_value (str or None): The original, unprocessed data.
             pattern (str or None): A regex pattern for extracting data from the 'raw_value'.
-            unit (str or None): A unit of measurement (e.g., 'minutes', 'hours') when relevant.
+            unit (str or None): A unit of measurement or **timezone** (e.g., 'minutes', 'hours', 'UTC', 'EST').
 
         Returns:
             datetime | int | str | None:
@@ -43,7 +41,7 @@ class DataFormatter:
                 - The original 'raw_value' if the field is unrecognized (with a warning).
                 - None if parsing or conversion fails.
         """
-        logger.debug(f"Starting format_value for field='{field}', raw_value='{raw_value}'")
+        logger.debug(f"Starting format_value for field='{field}', raw_value='{raw_value}', unit='{unit}'")
 
         # If there's no value to process, log a warning and return None.
         if raw_value is None:
@@ -63,7 +61,8 @@ class DataFormatter:
 
                 try:
                     # Normalize ordinal suffixes (e.g., 1st, 2nd, etc.) and AM/PM
-                    normalized_str = re.sub(r"(st|nd|rd|th)", "", date_time_str)
+                    normalized_str = re.sub(r"(\d+)(st|nd|rd|th)", r"\1", date_time_str)
+
                     # Convert "p.m." or "a.m." to uppercase AM/PM without dots
                     normalized_str = re.sub(
                         r"\b(p\.m\.?|a\.m\.?)",
@@ -76,7 +75,7 @@ class DataFormatter:
 
                     logger.debug(f"Normalized datetime string: '{normalized_str}'")
 
-                    # 1) Attempt to parse the datetime using the provided format_code.
+                    # 1) Parse the datetime naively using the provided format_code.
                     dt = datetime.strptime(normalized_str, format_code)
 
                     # 2) If day/month is missing in format_code, replace them with current date components.
@@ -86,24 +85,37 @@ class DataFormatter:
                     # If none of the format specifiers for month exist, fill in the current month.
                     if all(x not in format_code for x in ["%m", "%b", "%B"]):
                         dt = dt.replace(month=now.month)
-
-                    # 3) If the year is missing, default to the current year.
+                    # If the year is missing, default to the current year.
                     if "%Y" not in format_code:
                         dt = dt.replace(year=now.year)
 
-                    # 4) Check if the format indicates UTC via 'Z'; if so, assign or convert to UTC.
-                    if "%fZ" in format_code or "Z" in format_code:
-                        # If there's a literal "Z" in the format, we interpret the string as UTC.
+                    # 3) Determine the timezone:
+                    #    - If format_code indicates "Z" -> attach UTC
+                    #    - Else, use 'unit' for the timezone (e.g., 'UTC', 'EST')
+                    if "Z" in format_code:
+                        # If there's a literal "Z" in the format, interpret as UTC.
                         dt = dt.replace(tzinfo=pytz.UTC)
                     else:
-                        # Otherwise, treat the datetime as local and convert to UTC.
-                        dt = dt.replace(tzinfo=None)
-                        dt = dt.astimezone(datetime.utcnow().astimezone(pytz.UTC).tzinfo)
+                        # If 'unit' is passed as a timezone, attach it.
+                        if unit and unit.upper() == "UTC":
+                            dt = dt.replace(tzinfo=pytz.UTC)
+                        elif unit and unit.upper() == "EST":
+                            # Localize as Eastern Time
+                            eastern = pytz.timezone("US/Eastern")
+                            dt = eastern.localize(dt)
+                        else:
+                            # If no valid unit or unknown, we leave it naive (tzinfo=None).
+                            # Or you can decide on a default, e.g. UTC:
+                            logger.debug(f"Unknown or no timezone unit '{unit}' - leaving dt naive.")
 
-                    # 5) Ensure microseconds are capped at 6 digits; Python does this by default after parsing.
+                    # 4) Convert to UTC if it has a tzinfo. If it's still naive, you can decide what to do:
+                    if dt.tzinfo is not None:
+                        dt = dt.astimezone(pytz.UTC)
+
+                    # 5) Ensure microseconds are capped at 6 digits (strptime already does this).
                     dt = dt.replace(microsecond=dt.microsecond)
 
-                    logger.info(f"Successfully parsed 'lastUpdated' (UTC, 6-digit micros): '{dt}'")
+                    logger.info(f"Successfully parsed 'lastUpdated' as UTC: '{dt}'")
                     return dt
 
                 except ValueError as e:
@@ -120,7 +132,6 @@ class DataFormatter:
         elif field in ["patientsWaiting", "patientsInTreatment"]:
             logger.debug(f"Processing numeric field='{field}' with raw_value='{raw_value}'")
             try:
-                # Convert the string to an integer.
                 result = int(raw_value.strip())
                 logger.info(f"Successfully converted '{raw_value}' to integer: {result}")
                 return result
@@ -137,7 +148,7 @@ class DataFormatter:
             )
 
             if unit == "minutes":
-                # Directly convert the raw_value to an integer (presumably minutes).
+                # Directly convert the raw_value to an integer (minutes).
                 try:
                     result = round(int(float(raw_value)))
                     logger.info(f"Converted '{raw_value}' to minutes: {result}")
@@ -157,7 +168,6 @@ class DataFormatter:
                         f"Direct conversion of raw_value='{raw_value}' to minutes failed. "
                         "Attempting regex pattern match."
                     )
-
                 # Use regex to extract hours if direct conversion fails.
                 match = re.match(pattern, raw_value)
                 if match:
@@ -206,11 +216,11 @@ if __name__ == "__main__":
     test_cases = [
         {
             "lastUpdated": {
-                "pattern": "^([A-Za-z]+ \\d{1,2}, \\d{4}) at (\\d{1,2}:\\d{2} (a\\.m\\.|p\\.m\\.))$",
+                "pattern": r"^([A-Za-z]+ \d{1,2}, \d{4}) at (\d{1,2}:\d{2} (a\.m\.|p\.m\.))$",
                 "format_code": "%B %d, %Y",
-                "raw_value": "January 24, 2025 at 2: 30 p.m.",
-
-                "unit": None
+                "raw_value": "January 24, 2025 at 2:30 p.m.",
+                # Suppose we say the data is EST:
+                "unit": "EST"
             },
             "patientsWaiting": {
                 "format_code": None,
@@ -220,8 +230,8 @@ if __name__ == "__main__":
             },
             "estimatedWaitTime": {
                 "format_code": None,
-                "pattern": r"(\d+)\s*hour[s]?\s*and\s*(\d+)\s*minute[s]?",
-                "raw_value": "2 hours and 41 minutes",
+                "pattern": "(\\d+)\\s*hour[s]?\\s*and\\s*(\\d+)\\s*minute[s]?",
+                "raw_value": "2 hours and 36 minutes",
                 "unit": None
             },
             "patientsInTreatment": {
@@ -230,7 +240,7 @@ if __name__ == "__main__":
                 "raw_value": None,
                 "unit": None
             },
-            # The "response" key is used only for test-checking the returned data.
+            # The "response" key is just for an example check
             "response": "[datetime.datetime(2025, 1, 16, 23, 15), 17, 161, None]"
         }
     ]
@@ -239,7 +249,6 @@ if __name__ == "__main__":
 
     for index, test_case in enumerate(test_cases, start=1):
         response = []
-        # Iterate over each field in the test case, except 'response' which is just for comparison.
         for field, info in test_case.items():
             if field == "response":
                 continue
@@ -255,7 +264,6 @@ if __name__ == "__main__":
 
         # Compare the actual result to the expected 'response' string.
         expected = test_case["response"]
-
         print(f"Test case {index}: ", end='')
         if str(response) == expected:
             print("PASS")

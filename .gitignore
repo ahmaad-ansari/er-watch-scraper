@@ -1,2 +1,3 @@
 ../er-watch-scraper_copy/venv
 .env
+./data/scraping_targets_data.json
