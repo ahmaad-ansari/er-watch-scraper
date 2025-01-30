@@ -1,7 +1,7 @@
 # ER Watch
 [![Run My Scraper](https://github.com/ahmaad-ansari/er-watch-scraper/actions/workflows/scraper.yml/badge.svg)](https://github.com/ahmaad-ansari/er-watch-scraper/actions/workflows/scraper.yml)
 
-**ER Watch** is a real-time platform that provides accurate emergency room wait times for major hospitals across the Greater Toronto Area (GTA). By dynamically scraping or querying various online sources (including APIs, HTML pages, and Power BI dashboards), **ER Watch** allows users to quickly check and compare wait times, helping them make informed decisions about where to seek urgent care.
+**ER Watch** is a real-time platform that provides accurate emergency room wait times for major hospitals across Canada, Ontario. By dynamically scraping or querying various online sources (including APIs, HTML pages, and Power BI dashboards), **ER Watch** allows users to quickly check and compare wait times, helping them make informed decisions about where to seek urgent care.
 
 ---
 
